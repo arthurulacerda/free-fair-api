@@ -70,7 +70,11 @@ fair_args.add_argument('numero', type=str, help='Um número do logradouro onde s
 fair_args.add_argument('bairro', type=str, help='Bairro de localização da feira livre')
 fair_args.add_argument('referencia', type=str, help='Ponto de referência da localização da feira livre')
 
-resource_fiels = {
+page_args = reqparse.RequestParser()
+page_args.add_argument('page', type=int, help='Page number')
+page_args.add_argument('per_page', type=int, help='Number of registries per page')
+
+fair_fields = {
     'id': fields.Integer,
     'longitude': fields.String,
     'latitude': fields.String,
@@ -90,8 +94,35 @@ resource_fiels = {
     'referencia': fields.String,
 }
 
+paginated_fair_fields = {
+    'page': fields.Integer,
+    'pages': fields.Integer,
+    'per_page': fields.Integer,
+    'has_next': fields.Boolean,
+    'has_prev': fields.Boolean,
+    'items': fields.Nested({
+        'id': fields.Integer,
+        'longitude': fields.String,
+        'latitude': fields.String,
+        'setcens': fields.String,
+        'areap': fields.String,
+        'coddist': fields.String,
+        'distrito': fields.String,
+        'codsubpref': fields.String,
+        'subpref': fields.String,
+        'regiao5': fields.String,
+        'regiao8': fields.String,
+        'nome_feira': fields.String,
+        'registro': fields.String,
+        'logradouro': fields.String,
+        'numero': fields.String,
+        'bairro': fields.String,
+        'referencia': fields.String
+    })
+}
+
 class Fair(Resource):
-    @marshal_with(resource_fiels)
+    @marshal_with(fair_fields)
     def get(self, fair_id):
         fair = FairModel.query.filter_by(id=fair_id).first()
         if fair:
@@ -99,7 +130,7 @@ class Fair(Resource):
         else:
             abort(404, message=f'Fair with ID {fair_id} does not exist.')
 
-    @marshal_with(resource_fiels)
+    @marshal_with(fair_fields)
     def post(self, fair_id):
         try:
             args = fair_args.parse_args()
@@ -128,7 +159,7 @@ class Fair(Resource):
         except:
             abort(409, message=f'Fair with ID {fair_id} already exists.')
 
-    @marshal_with(resource_fiels)
+    @marshal_with(fair_fields)
     def put(self, fair_id):
         args = fair_args.parse_args()
         fair = FairModel.query.filter_by(id=fair_id).first()
@@ -151,7 +182,19 @@ class Fair(Resource):
         else:
             abort(404, message=f'Fair with ID {fair_id} does not exist.')
 
+class FairList(Resource):
+    @marshal_with(paginated_fair_fields)
+    def get(self):
+        args = page_args.parse_args()
+        paginated_fairs = FairModel.query.paginate(
+            page=args['page'],
+            per_page=args['per_page'],
+            max_per_page=20
+        )
+        return paginated_fairs
+
 api.add_resource(Fair, '/fair/<int:fair_id>')
+api.add_resource(FairList, '/fairs')
 
 if __name__ == '__main__':
     app.run(debug=True)
