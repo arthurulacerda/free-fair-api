@@ -5,22 +5,22 @@ class FairModel(db.Model):
     __tablename__ = 'fairs'
 
     id = db.Column(db.Integer, primary_key=True)
-    longitude = db.Column(db.String(10))
-    latitude = db.Column(db.String(10))
-    setcens = db.Column(db.String(15))
-    areap = db.Column(db.String(13))
-    coddist = db.Column(db.String(9))
-    distrito = db.Column(db.String(18))
-    codsubpref = db.Column(db.String(2))
-    subpref = db.Column(db.String(25))
-    regiao5 = db.Column(db.String(6))
-    regiao8 = db.Column(db.String(7))
-    nome_feira = db.Column(db.String(30))
-    registro = db.Column(db.String(6))
-    logradouro = db.Column(db.String(34))
-    numero = db.Column(db.String(5))
-    bairro = db.Column(db.String(20))
-    referencia = db.Column(db.String(24))
+    longitude = db.Column(db.String(100))
+    latitude = db.Column(db.String(100))
+    setcens = db.Column(db.String(100))
+    areap = db.Column(db.String(100))
+    coddist = db.Column(db.String(100))
+    distrito = db.Column(db.String(100))
+    codsubpref = db.Column(db.String(100))
+    subpref = db.Column(db.String(100))
+    regiao5 = db.Column(db.String(100))
+    regiao8 = db.Column(db.String(100))
+    nome_feira = db.Column(db.String(100))
+    registro = db.Column(db.String(100))
+    logradouro = db.Column(db.String(100))
+    numero = db.Column(db.String(100))
+    bairro = db.Column(db.String(100))
+    referencia = db.Column(db.String(100))
 
     def __init__(self, longitude, latitude,
                  setcens, areap, coddist,
@@ -72,7 +72,6 @@ class FairModel(db.Model):
 
     def save_to_db(self):
         db.session.add(self)
-        print(self.json())
         db.session.commit()
 
     def delete_from_db(self):

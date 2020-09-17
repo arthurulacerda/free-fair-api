@@ -46,3 +46,13 @@ Após finalizar a configuração do banco de dados, inicie a aplicação com o c
 ```
 python app.py
 ```
+
+## Instalação
+
+Para popular o banco de dados, basta deixar a aplicação executando, e em outro terminal, executar o script:
+
+```
+python import.py
+```
+
+O script fará a leitura do arquivo CSV no diretório *data* e realizará requisições POST para adicionar os registros no banco de dados.
