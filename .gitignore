@@ -1,5 +1,8 @@
 # Virtual enviroment
-v-env
+venv
 
 #SQLite database
 database.*
+
+#Remove pycache
+__pycache__
