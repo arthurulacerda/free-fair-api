@@ -1,5 +1,6 @@
 from db import db
 
+
 class FairModel(db.Model):
     __tablename__ = 'fairs'
 
@@ -22,11 +23,11 @@ class FairModel(db.Model):
     referencia = db.Column(db.String(24))
 
     def __init__(self, longitude, latitude,
-                setcens, areap, coddist,
-                distrito, codsubpref, subpref,
-                regiao5, regiao8, nome_feira,
-                registro, logradouro, numero,
-                bairro, referencia):
+                 setcens, areap, coddist,
+                 distrito, codsubpref, subpref,
+                 regiao5, regiao8, nome_feira,
+                 registro, logradouro, numero,
+                 bairro, referencia):
         self.longitude = longitude
         self.latitude = latitude
         self.setcens = setcens
@@ -64,7 +65,6 @@ class FairModel(db.Model):
             'bairro': self.bairro,
             'referencia': self.referencia,
         }
-
 
     @classmethod
     def find_by_id(cls, fair_id):

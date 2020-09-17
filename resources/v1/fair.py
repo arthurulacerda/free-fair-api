@@ -1,9 +1,10 @@
 from flask_restful import Resource, reqparse
 from models.v1.fair import FairModel
 
+
 class Fair(Resource):
     parser = reqparse.RequestParser()
-    page_parser = reqparse.RequestParser()
+    find_parser = reqparse.RequestParser()
 
     parser.add_argument('longitude', type=str, help='Longitude da localização do estabelecimento no território do Município, conforme MDC')
     parser.add_argument('latitude', type=str, help='Latitude da localização do estabelecimento no território do Município, conforme MDC')
@@ -22,9 +23,12 @@ class Fair(Resource):
     parser.add_argument('bairro', type=str, help='Bairro de localização da feira livre')
     parser.add_argument('referencia', type=str, help='Ponto de referência da localização da feira livre')
 
-
-    page_parser.add_argument('page', type=int, help='Page number')
-    page_parser.add_argument('per_page', type=int, help='Number of registries per page')
+    find_parser.add_argument('page', type=int, help='Page number')
+    find_parser.add_argument('per_page', type=int, help='Number of registries per page')
+    find_parser.add_argument('distrito', type=str, help='Nome do Distrito Municipal')
+    find_parser.add_argument('regiao5', type=str, help='Região conforme divisão do Município em 5 áreas')
+    find_parser.add_argument('nome_feira', type=str, help='Denominação da feira livre atribuída pela Supervisão de Abastecimento')
+    find_parser.add_argument('bairro', type=str, help='Bairro de localização da feira livre')
 
     def get(self, fair_id):
         fair = FairModel.find_by_id(fair_id)
@@ -54,8 +58,22 @@ class Fair(Resource):
 
 class FairList(Resource):
     def get(self):
-        data = Fair.page_parser.parse_args()
-        paginated_fairs = FairModel.query.paginate(
+        data = Fair.find_parser.parse_args()
+        subquery = FairModel.query
+
+        if data['distrito']:
+            subquery = subquery.filter_by(distrito=data['distrito'])
+
+        if data['regiao5']:
+            subquery = subquery.filter_by(regiao5=data['regiao5'])
+
+        if data['nome_feira']:
+            subquery = subquery.filter_by(nome_feira=data['nome_feira'])
+
+        if data['bairro']:
+            subquery = subquery.filter_by(bairro=data['bairro'])
+
+        paginated_fairs = subquery.paginate(
             page=data['page'],
             per_page=data['per_page'],
             max_per_page=20

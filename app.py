@@ -11,9 +11,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.secret_key = 'Dese.Decent.Pups.BOOYO0OST'
 api = Api(app)
 
+
 @app.before_first_request
 def create_tables():
     db.create_all()
+
 
 api.add_resource(Fair, '/v1/fair/<int:fair_id>')
 api.add_resource(FairList, '/v1/fair')

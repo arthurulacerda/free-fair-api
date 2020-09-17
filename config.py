@@ -3,4 +3,5 @@ mysql = {'host': 'localhost',
          'passwd': 'DBpassword_1234',
          'db': 'db_fair'}
 
-mysqlConfig = "mysql://{}:{}@{}:3306/{}".format(mysql['user'], mysql['passwd'], mysql['host'], mysql['db'])
+mysqlConfig = "mysql://{}:{}@{}:3306/{}".format(
+    mysql['user'], mysql['passwd'], mysql['host'], mysql['db'])
