@@ -4,6 +4,8 @@
 
 Simples exemplo de API utilizando Flask RESTful API. A API realiza CRUD de feiras.
 
+[Documentação](https://freefairapi.docs.apiary.io/)
+
 ## Instalação
 
 Esta API foi desenvolvida utilizando  Python 3 e em ambiente Linux (Ubuntu)
